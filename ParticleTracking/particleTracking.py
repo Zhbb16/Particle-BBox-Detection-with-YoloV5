@@ -1,22 +1,18 @@
 import cv2 as cv
-import argparse
-import sys
+
 import numpy as np
 import os.path
 import math
 from utils.centroidtracker import CentroidTracker
 from utils.trackableobject import TrackableObject
+from detect import run # to run yolov5
 
 # Initialize the parameters
-confThreshold = 0.6  #Confidence threshold
+confThreshold = 0.4  #Confidence threshold
 nmsThreshold = 0.4   #Non-maximum suppression threshold
-inpWidth = 416       #Width of network's input image
-inpHeight = 416      #Height of network's input image
+inpWidth = 640       #Width of network's input image
+inpHeight = 640      #Height of network's input image
 
-parser = argparse.ArgumentParser(description='Object Detection using YOLO in OPENCV')
-
-parser.add_argument('--video', default='test.mp4', help='Path to video file.')
-args = parser.parse_args()
         
 # Load names of classes
 classesFile = "coco.names"
@@ -48,18 +44,6 @@ H = None
 ct = CentroidTracker(maxDisappeared=40, maxDistance=50)
 trackers = []
 trackableObjects = {}
- 
-# initialize the total number of frames processed thus far, along
-# with the total number of objects that have moved either up or down
-totalDown = 0
-totalUp = 0
-
-# Get the names of the output layers
-def getOutputsNames(net):
-    # Get the names of all the layers in the network
-    layersNames = net.getLayerNames()
-    # Get the names of the output layers, i.e. the layers with unconnected outputs
-    return [layersNames[i - 1] for i in net.getUnconnectedOutLayers()]
 
 
 # Remove the bounding boxes with low confidence using non-maxima suppression
@@ -105,9 +89,7 @@ def postprocess(frame, outs):
             # centroids with (2) the newly computed object centroids
             objects = ct.update(rects)
 
-# Process inputs
-winName = 'People Counting and Tracking System'
-cv.namedWindow(winName, cv.WINDOW_NORMAL)
+
 
 outputFile = "yolo_out_py.avi"
 
@@ -145,11 +127,7 @@ while cv.waitKey(1) < 0:
     # Create a 4D blob from a frame.
     blob = cv.dnn.blobFromImage(frame, 1/255, (inpWidth, inpHeight), [0,0,0], 1, crop=False)
 
-    # Sets the input to the network
-    net.setInput(blob)
-
-    # Runs the forward pass to get output of the output layers
-    outs = net.forward(getOutputsNames(net))
+    outs = run(blob)
 
     # Remove the bounding boxes with low confidence
     postprocess(frame, outs)
