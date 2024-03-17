@@ -5,6 +5,7 @@ The experimental setup is shown below:
 
 The sample of image which was used for training for YoloV5 (obtained from ultralytics) is also shown below:
 ![](imgs/Sample.tif)
+
 One of the big challenges here was labeling of bboxes in thousands of these image manually and use these images for training the YoloV5. After the training the model was run on the rest of these images to extract the bbox locations from images.
 The original image size was 2584 * 1936, which was resized (with padding to keep aspect ration the same) to the size of 640 * 640 for training yoloV5.
 
@@ -13,6 +14,7 @@ The algorithm just provides id based on the maximum allowable distance center-2-
 ![](imgs/CentroidTracker.png)
 
 After the tracking, I am able to investigate the type of behavior and trajectory of particles in videos. A result of one video is shown below:
+
 ![](imgs/TrackingResult.png)
 
 ---------------------------------------------------------------------------------------------------------------
@@ -64,6 +66,3 @@ head: [
 
     [[17, 20, 23], 1, Detect, [nc, anchors]], # Detect(P3, P4, P5)
   ]
-
-After detecting the particles from images they were tracked by their ID in video for investigating their type of trajectories and behaviors. A sample of trajectory is shown below:
-![](imgs/Sample.tif)
