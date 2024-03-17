@@ -3,11 +3,19 @@ This is a repository of My Master's thesis about the particle bounding box detec
 The experimental setup is shown below:
 ![](imgs/ExperimentalSetup.png)
 
-The sample of image which was used for training for YoloV5 is also shown below:
+The sample of image which was used for training for YoloV5 (obtained from ultralytics) is also shown below:
 ![](imgs/Sample.tif)
 One of the big challenges here was labeling of bboxes in thousands of these image manually and use these images for training the YoloV5. After the training the model was run on the rest of these images to extract the bbox locations from images.
-The original image size was 2584*1936, which was resized (with padding to keep aspect ration the same) to the size of 640*640 for training yoloV5.
+The original image size was 2584 * 1936, which was resized (with padding to keep aspect ration the same) to the size of 640 * 640 for training yoloV5.
 
+The centroid tracker was a simple algorithm for providing ID to the detected bboxes in sequences of frames of video. The algorithm was obtained from PyImageSearch.
+The algorithm just provides id based on the maximum allowable distance center-2-center from one frame to another and maximum allowable to be disappeared from one frame, similar to the following image:
+![](imgs/CentroidTracker.png)
+
+After the tracking, I am able to investigate the type of behavior and trajectory of particles in videos. A result of one video is shown below:
+![](imgs/TrackingResult.png)
+
+---------------------------------------------------------------------------------------------------------------
 The architecture of the yoloV5 with one class is as follows:
 # Parameters
 nc: 1 # number of classes
